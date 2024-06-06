@@ -22,6 +22,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       id_socket: client.id,
     });
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleConnection(client: Socket, ...args: any[]) {
     console.log('un usuario se a conectado de SOCKET.IO', client.id);
   }
@@ -43,6 +44,66 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       id: data.id,
       lat: data.lat,
       lng: data.lng,
+    });
+  }
+  @SubscribeMessage('new_client_request')
+  handleNewClientRequest(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any,
+  ) {
+    this.server.emit('created_client_request', {
+      id_socket: client.id,
+      id_client_request: data.id_client_request,
+    });
+  }
+
+  @SubscribeMessage('new_driver_offer')
+  handleNewDriverOffer(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any,
+  ) {
+    console.log('ID CLIENT REQUEST DRIVER OFFER:', data.id_client_request);
+    this.server.emit(`created_driver_offer/${data.id_client_request}`, {
+      id_socket: client.id,
+    });
+  }
+
+  @SubscribeMessage('new_driver_assigned')
+  handleNewDriverAssigned(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any,
+  ) {
+    console.log('ID  DRIVER asignado:', data.id_driver);
+    console.log('ID  cliente :', client.id);
+    console.log('data  cliente :', data.id_client_request);
+    console.log('ID  DRIVER asignado:', data.id_driver);
+    this.server.emit(`driver_assigned/${data.id_driver}`, {
+      id_socket: client.id,
+      id_client_request: data.id_client_request,
+    });
+  }
+
+  @SubscribeMessage('trip_change_driver_position')
+  handleTripChangeDriverPosition(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any,
+  ) {
+    this.server.emit(`trip_new_driver_position/${data.id_client}`, {
+      id_socket: client.id,
+      lat: data.lat,
+      lng: data.lng,
+    });
+  }
+
+  @SubscribeMessage('update_status_trip')
+  handleUpdateStatusTrip(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any,
+  ) {
+    this.server.emit(`new_status_trip/${data.id_client_request}`, {
+      id_socket: client.id,
+      status: data.status,
+      id_client_request: data.id_client_request,
     });
   }
 }

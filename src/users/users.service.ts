@@ -19,6 +19,25 @@ export class UsersService {
   findAll() {
     return this.usersRepository.find({ relations: ['roles'] });
   }
+  findById(id: number) {
+    const userFound = this.usersRepository.findOneBy({ id: id });
+    if (!userFound) {
+      throw new HttpException('Usuario no existe', HttpStatus.NOT_FOUND);
+    }
+    return userFound;
+  }
+  async updateToken(id: number, token: string) {
+    const userFound = await this.usersRepository.findOneBy({
+      id: id,
+    });
+    if (!userFound) {
+      throw new HttpException('Usuario no existe', HttpStatus.NOT_FOUND);
+    }
+    const user = userFound;
+    user.notification_token = token;
+    const updateUser = Object.assign(userFound, user);
+    return this.usersRepository.save(updateUser);
+  }
   async update(id: number, user: UpdateUserDto) {
     const userFound = await this.usersRepository.findOneBy({
       id: id,

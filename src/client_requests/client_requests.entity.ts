@@ -1,4 +1,5 @@
 import { Point } from 'geojson';
+import { DriverTripOffers } from 'src/driver_trip_offers/driver_trip_offers.entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -83,7 +85,16 @@ export class ClientRequests {
   @JoinColumn({ name: 'id_client' })
   user: User;
 
-  //   @ManyToOne(() => User, (user) => user.id)
-  //   @JoinColumn({ name: 'id_driver_assigned' })
-  //   driverAssigned: User;
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'id_driver_assigned' })
+  driverAssigned: User;
+
+  @OneToMany(
+    () => DriverTripOffers,
+    (driverTripOffers) => driverTripOffers.id_client_request,
+    {
+      cascade: true,
+    },
+  )
+  driverTripOffers: DriverTripOffers;
 }

@@ -54,12 +54,11 @@ export class DriversPositionService {
     WHERE
         id_driver = ${id_driver}
     `);
-    return driverPosition[0];
-    // {
-    //   id_driver: driverPosition[0].id_driver,
-    //   lat: driverPosition[0].position.y,
-    //   lng: driverPosition[0].position.x,
-    // };
+    return {
+      id_driver: driverPosition[0].id_driver,
+      lat: driverPosition[0].position.y,
+      lng: driverPosition[0].position.x,
+    };
   }
 
   async getNearbyDrivers(client_lat: number, client_lng: number) {

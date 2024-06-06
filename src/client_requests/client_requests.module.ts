@@ -5,6 +5,7 @@ import { TimeAndDistanceValuesModule } from 'src/time_and_distance_values/time_a
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientRequests } from './client_requests.entity';
 import { User } from 'src/users/user.entity';
+import { FirebaseModule } from 'src/firebase/firebase.module';
 
 @Module({
   providers: [ClientRequestsService],
@@ -12,6 +13,7 @@ import { User } from 'src/users/user.entity';
   imports: [
     TimeAndDistanceValuesModule,
     TypeOrmModule.forFeature([ClientRequests, User]),
+    FirebaseModule,
   ],
 })
 export class ClientRequestsModule {}

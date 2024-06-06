@@ -57,11 +57,13 @@ export class UsersController {
     console.log(file);
     return this.usersService.updateWithImage(file, id, user);
   }
+
   @HasRoles(JwtRole.CLIENT)
-  @UseGuards(JwtAuthGuard, JwtRolesGuard)
-  @Put(':id')
-  @UseGuards(JwtAuthGuard)
-  update(@Param('id', ParseIntPipe) id: number, @Body() user: UpdateUserDto) {
-    return this.usersService.update(id, user);
+  @Put('notification_token/:id') // http://192.168.1.15:3000/users/:id -> PUT
+  updateNotificationToken(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('notification_token') notificationToken: string,
+  ) {
+    return this.usersService.updateToken(id, notificationToken);
   }
 }

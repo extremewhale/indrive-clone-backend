@@ -18,13 +18,22 @@ import { FirebaseModule } from './firebase/firebase.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'monorail.proxy.rlwy.net',
-      port: 13379,
-      username: 'root',
-      password: 'LtqwtFfoyNHrfgcTkEnedwXsAibwklRG',
-      database: 'indrive_clone_db',
+      host: process.env.MYSQL_HOST || 'localhost',
+      port: parseInt(process.env.MYSQL_PORT),
+      username: process.env.MYSQL_USERNAME || 'root',
+      password: process.env.MYSQL_USERNAME,
+      database: process.env.MYSQL_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      ssl: process.env.MYSQL_SSL === 'true',
+      extra: {
+        ssl:
+          process.env.MYSQL_SSL === 'true'
+            ? {
+                rejectUnauthorized: false,
+              }
+            : null,
+      },
     }),
     ConfigModule.forRoot({ cache: true }),
     UsersModule,

@@ -18,10 +18,10 @@ import { FirebaseModule } from './firebase/firebase.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
+      host: 'monorail.proxy.rlwy.net',
+      port: 13379,
       username: 'root',
-      password: '150920031Asdi',
+      password: 'LtqwtFfoyNHrfgcTkEnedwXsAibwklRG',
       database: 'indrive_clone_db',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
